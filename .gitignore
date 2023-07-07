@@ -3,4 +3,7 @@ __pycache__/
 *.txt
 *.wav
 *.mp3
-
+cache/
+venv/
+verg/
+.idea/

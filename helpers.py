@@ -71,11 +71,8 @@ def create_config(output_dir):
     pretrained_vad = "vad_multilingual_marblenet"
     pretrained_speaker_model = "titanet_large"
 
-    # num_workers = 1 results in "pickle" errors from Nvidia's NeMo on Silicon M chips
-    if (platform.machine() == "arm64") or (platform.machine() == "aarch64"):
-        config.num_workers = 0
-    else:
-        config.num_workers = 1  # Workaround for multiprocessing hanging with ipython issue
+    # set num_workers to 0 because it broke from pickling errors
+    config.num_workers = 0
 
     config.diarizer.manifest_filepath = os.path.join(data_dir, "input_manifest.json")
     config.diarizer.out_dir = (
