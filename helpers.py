@@ -42,13 +42,15 @@ wav2vec2_langs = [
 ]
 
 
-def create_config(output_dir):
+def create_config(output_dir, audio_filepath):
     DOMAIN_TYPE = "telephonic"  # Can be meeting or telephonic based on domain type of the audio file
     CONFIG_FILE_NAME = f"diar_infer_{DOMAIN_TYPE}.yaml"
     CONFIG_URL = f"https://raw.githubusercontent.com/NVIDIA/NeMo/main/examples/speaker_tasks/diarization/conf/inference/{CONFIG_FILE_NAME}"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
     MODEL_CONFIG = os.path.join(output_dir, CONFIG_FILE_NAME)
     if not os.path.exists(MODEL_CONFIG):
-        MODEL_CONFIG = wget.download(CONFIG_URL, output_dir)
+        MODEL_CONFIG = wget.download(CONFIG_URL, str(output_dir))
 
     config = OmegaConf.load(MODEL_CONFIG)
 
@@ -56,7 +58,7 @@ def create_config(output_dir):
     os.makedirs(data_dir, exist_ok=True)
 
     meta = {
-        "audio_filepath": os.path.join(output_dir, "mono_file.wav"),
+        "audio_filepath": str(audio_filepath),
         "offset": 0,
         "duration": None,
         "label": "infer",
@@ -76,7 +78,7 @@ def create_config(output_dir):
 
     config.diarizer.manifest_filepath = os.path.join(data_dir, "input_manifest.json")
     config.diarizer.out_dir = (
-        output_dir  # Directory to store intermediate files and prediction outputs
+        str(output_dir)  # Directory to store intermediate files and prediction outputs
     )
 
     config.diarizer.speaker_embeddings.model_path = pretrained_speaker_model
