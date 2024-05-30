@@ -248,7 +248,7 @@ if __name__ == '__main__':
     mtypes = {'cpu': 'int8', 'cuda': 'float16'}
     device = "cpu"
     language = "nl"
-    file = "./verg/20230629 raad trim.mp3"
+    file = "./verg/150121_0012.MP3"
     file = os.path.abspath(file)
     assert os.path.exists(file)
     model_name = "large-v2"
